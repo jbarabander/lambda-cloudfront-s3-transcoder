@@ -45,7 +45,7 @@ exports.handler = function (event, context) {
       Container: 'auto'
     },
     Outputs: [{
-      Key: 'hls-' + newKey + '.ts',
+      Key: 'hls-' + newKey,
       ThumbnailPattern: 'thumbs-' + newKey + '-{count}',
       PresetId: '1351620000001–200010'
     }]
