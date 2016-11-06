@@ -1,14 +1,14 @@
-'use strict'
+'use strict';
 var AWS = require('aws-sdk');
 var pipelineId = '1478447144171-5wfhkh';
 
 var s3 = new AWS.S3({
- apiVersion: ‘2012–09–25’
+ apiVersion: '2012–09–25'
 });
 
 var et = new AWS.ElasticTranscoder({
- apiVersion: ‘2012–09–25’,
- region: ‘us-east-1’
+ apiVersion: '2012–09–25',
+ region: 'us-east-1'
 });
 
 var validVideoFormats = [
