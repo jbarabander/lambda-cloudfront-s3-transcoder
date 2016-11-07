@@ -7,7 +7,9 @@
       scope: {
         thumbnail: '@',
         streamingSrc: '@',
-        fallbackSrc: '@'
+        fallbackSrc: '@',
+        height: '@',
+        width: '@'
       },
       templateUrl: 'directives/ResponsiveVideoDirective/ResponsiveVideoDirective.html',
       link: function (scope, element, attr) {
