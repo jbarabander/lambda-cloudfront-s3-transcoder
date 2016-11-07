@@ -16,7 +16,7 @@
         var video = outerDiv.getElementsByClassName('video-to-show')[0];
         video.oncanplay = function () {
           video.play();
-        }
+        };
         scope.safeStreamingSrc = $sce.trustAsResourceUrl(scope.streamingSrc);
       }
     }
