@@ -3,11 +3,11 @@ var AWS = require('aws-sdk');
 var pipelineId = '1478447144171-5wfhkh';
 
 var s3 = new AWS.S3({
- apiVersion: '2012–09–25'
+ apiVersion: '2012-09-25'
 });
 
 var et = new AWS.ElasticTranscoder({
- apiVersion: '2012–09–25',
+ apiVersion: '2012-09-25',
  region: 'us-east-1'
 });
 
@@ -47,7 +47,7 @@ exports.handler = function (event, context) {
     Outputs: [{
       Key: 'hls-' + newKey,
       ThumbnailPattern: 'thumbs-' + newKey + '-{count}',
-      PresetId: '1351620000001–200010'
+      PresetId: '1351620000001-200010'
     }]
   };
   et.createJob(params, function (err, data) {
