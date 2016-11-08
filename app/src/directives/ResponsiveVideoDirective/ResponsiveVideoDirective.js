@@ -13,13 +13,29 @@
       },
       templateUrl: 'directives/ResponsiveVideoDirective/ResponsiveVideoDirective.html',
       link: function (scope, element, attr) {
-        scope.showVideo = false;
         var outerDiv = element.children()[0];
         var video = outerDiv.getElementsByClassName('video-to-show')[0];
-        video.oncanplay = function () {
-          video.play();
-        };
+        scope.showVideo = false;
         scope.safeStreamingSrc = $sce.trustAsResourceUrl(scope.streamingSrc);
+        scope.loadVideo = function () {
+          var canPlayType = video.canPlayType;
+          // if (video.canPlayType('application/vnd.apple.mpegURL') === 'probably') {
+          //   scope.showVideo = true;
+          //   return;
+          // }
+          if(Hls.isSupported()) {
+            var hls = new Hls();
+            hls.loadSource(scope.streamingSrc);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED,function() {
+              scope.showVideo = true
+              video.play();
+            });
+          }
+        }
+        // video.oncanplay = function () {
+        //   video.play();
+        // };
       }
     }
   }])

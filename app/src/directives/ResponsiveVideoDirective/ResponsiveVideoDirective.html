@@ -1,8 +1,9 @@
 <div>
-  <!-- <div class="thumbnail-container">
+  <div class="thumbnail-container" ng-click="loadVideo()" ng-show="!showVideo">
+    hi
     <i class="fa fa-play-circle-o" aria-hidden="true"></i>
-  </div> -->
+  </div>
   <video class="video-to-show" height="270" width="480" controls>
-    <source src="{{::safeStreamingSrc}}" type="application/x-mpegURL">
+    <source src="{{::safeStreamingSrc}}" type="application/x-mpegURL" ng-if="showVideo">
   </video>
 </div>
