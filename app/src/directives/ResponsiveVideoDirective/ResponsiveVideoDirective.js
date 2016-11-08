@@ -18,17 +18,18 @@
         scope.showVideo = false;
         scope.safeStreamingSrc = $sce.trustAsResourceUrl(scope.streamingSrc);
         scope.loadVideo = function () {
-          var canPlayType = video.canPlayType;
-          // if (video.canPlayType('application/vnd.apple.mpegURL') === 'probably') {
-          //   scope.showVideo = true;
-          //   return;
-          // }
+          if (video.currentSrc === scope.streamingSrc) {
+            scope.showVideo = true;
+            video.play();
+            return;
+          }
           if(Hls.isSupported()) {
             var hls = new Hls();
             hls.loadSource(scope.streamingSrc);
             hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED,function() {
-              scope.showVideo = true
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+              scope.showVideo = true;
+              scope.$apply();
               video.play();
             });
           }
