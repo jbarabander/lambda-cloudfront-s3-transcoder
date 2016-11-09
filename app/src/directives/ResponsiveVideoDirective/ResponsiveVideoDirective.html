@@ -3,12 +3,11 @@
     hi
     <i class="fa fa-play-circle-o" aria-hidden="true"></i>
   </div>
-  <div ng-show="showVideo">
-    <video class="video-to-show" height="270" width="480" controls ng-show="!useFallbackSrc">
-      <source src="{{::safeStreamingSrc}}" type="application/x-mpegURL">
-    </video>
-    <video class="fallback-video" ng-if="useFallbackSrc">
-      <source src="{{::safeFallbackSrc}}">
+  <div>
+    <video class="hls-fallback" controls height="270" width="480" ng-if="useHlsFallback" ng-show="showHlsFallback"></video>
+    <video class="native-video" controls height="270" width="480" ng-if="useNativeVideo" ng-show="showNativeVideo">
+      <source src="{{::safeStreamingSrc}}">
+      <!-- <source src="{{::safeFallbackSrc}}"> -->
     </video>
   </div>
 </div>

@@ -1,7 +1,7 @@
 'use strict';
 (function () {
   var app = angular.module('video-test');
-  app.directive('responsiveVideo', ['$sce', function ($sce) {
+  app.directive('responsiveVideo', ['$sce', '$timeout', function ($sce, $timeout) {
     return {
       restrict: 'E',
       scope: {
@@ -14,29 +14,40 @@
       templateUrl: 'directives/ResponsiveVideoDirective/ResponsiveVideoDirective.html',
       link: function (scope, element, attr) {
         var outerDiv = element.children()[0];
-        scope.showVideo = false;
+        scope.useNativeVideo = false;
+        scope.showNativeVideo = false;
         scope.showOptions = false;
+        scope.useHlsFallback = false;
+        scope.showHlsFallback = false;
         scope.safeStreamingSrc = $sce.trustAsResourceUrl(scope.streamingSrc);
         scope.safeFallbackSrc = $sce.trustAsResourceUrl(scope.fallbackSrc);
-        scope.useFallbackSrc = !Hls.isSupported() && video.currentSrc === '';
         scope.loadVideo = function () {
-          scope.showOptions = true;
-          var video = outerDiv.getElementsByClassName('video-to-show')[0];
-          if (video.currentSrc === scope.streamingSrc) {
-            scope.showVideo = true;
-            video.play();
+          var canPlayHls = document.createElement('video').canPlayType('application/vnd.apple.mpegURL');
+          console.log(canPlayHls);
+          if (canPlayHls === '' && Hls.isSupported()) {
+            scope.useHlsFallback = true;
+            $timeout(function () {
+              var video = outerDiv.getElementsByClassName('hls-fallback')[0];
+              var hls = new Hls();
+              hls.loadSource(scope.streamingSrc);
+              hls.attachMedia(video);
+              hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                scope.showHlsFallback = true;
+                scope.$apply();
+                video.play();
+              });
+            });
             return;
           }
-          if(Hls.isSupported()) {
-            var hls = new Hls();
-            hls.loadSource(scope.streamingSrc);
-            hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, function() {
-              scope.showVideo = true;
+          scope.useNativeVideo = true;
+          $timeout(function () {
+            var video = outerDiv.getElementsByClassName('native-video')[0];
+            video.oncanplay = function () {
+              scope.showNativeVideo = true;
               scope.$apply();
               video.play();
-            });
-          }
+            }
+          })
         }
         // video.oncanplay = function () {
         //   video.play();
