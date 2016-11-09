@@ -3,7 +3,12 @@
     hi
     <i class="fa fa-play-circle-o" aria-hidden="true"></i>
   </div>
-  <video class="video-to-show" height="270" width="480" controls ng-show="showVideo">
-    <source src="{{::safeStreamingSrc}}" type="application/x-mpegURL">
-  </video>
+  <div ng-show="showVideo">
+    <video class="video-to-show" height="270" width="480" controls ng-show="!useFallbackSrc">
+      <source src="{{::safeStreamingSrc}}" type="application/x-mpegURL">
+    </video>
+    <video class="fallback-video" ng-if="useFallbackSrc">
+      <source src="{{::safeFallbackSrc}}">
+    </video>
+  </div>
 </div>

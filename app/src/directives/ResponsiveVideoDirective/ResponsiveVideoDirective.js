@@ -14,10 +14,14 @@
       templateUrl: 'directives/ResponsiveVideoDirective/ResponsiveVideoDirective.html',
       link: function (scope, element, attr) {
         var outerDiv = element.children()[0];
-        var video = outerDiv.getElementsByClassName('video-to-show')[0];
         scope.showVideo = false;
+        scope.showOptions = false;
         scope.safeStreamingSrc = $sce.trustAsResourceUrl(scope.streamingSrc);
+        scope.safeFallbackSrc = $sce.trustAsResourceUrl(scope.fallbackSrc);
+        scope.useFallbackSrc = !Hls.isSupported() && video.currentSrc === '';
         scope.loadVideo = function () {
+          scope.showOptions = true;
+          var video = outerDiv.getElementsByClassName('video-to-show')[0];
           if (video.currentSrc === scope.streamingSrc) {
             scope.showVideo = true;
             video.play();
