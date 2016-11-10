@@ -21,11 +21,10 @@
         scope.showHlsFallback = false;
         scope.safeStreamingSrc = $sce.trustAsResourceUrl(scope.streamingSrc);
         scope.safeFallbackSrc = $sce.trustAsResourceUrl(scope.fallbackSrc);
-        var videoElement = document.createElement('video');
+        var videoElement = document.getElementsByClassName('video-to-play')[0];
         videoElement.setAttribute("controls","controls");
         videoElement.setAttribute("height", "270");
         videoElement.setAttribute("width", "480");
-        videoElement.setAttribute("preload", "none");
         var canPlayHls = videoElement.canPlayType('application/vnd.apple.mpegURL');
         if (canPlayHls === '' && Hls.isSupported()) {
           var hls = new Hls();
@@ -41,7 +40,6 @@
             videoElement.appendChild(alternateSource);
           }
         }
-        outerDiv.appendChild(videoElement);
       }
     }
   }])
