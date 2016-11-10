@@ -14,11 +14,6 @@
       templateUrl: 'directives/ResponsiveVideoDirective/ResponsiveVideoDirective.html',
       link: function (scope, element, attr) {
         var outerDiv = element.children()[0];
-        scope.useNativeVideo = false;
-        scope.showNativeVideo = false;
-        scope.showOptions = false;
-        scope.useHlsFallback = false;
-        scope.showHlsFallback = false;
         scope.safeStreamingSrc = $sce.trustAsResourceUrl(scope.streamingSrc);
         scope.safeFallbackSrc = $sce.trustAsResourceUrl(scope.fallbackSrc);
         var videoElement = document.getElementsByClassName('video-to-play')[0];
