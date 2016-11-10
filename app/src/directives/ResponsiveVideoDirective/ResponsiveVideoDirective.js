@@ -26,16 +26,20 @@
           hls.loadSource(scope.streamingSrc);
           hls.attachMedia(videoElement);
         } else {
-          var source = document.createElement('source');
-          source.setAttribute('src', scope.streamingSrc);
+          var source = createSourceElement(scope.streamingSrc);
           videoElement.appendChild(source);
           if (scope.fallbackSrc) {
-            var alternateSource = document.createElement('source');
-            alternateSource.setAttribute('src', scope.fallbackSrc);
+            var alternateSource = createSourceElement(scope.fallbackSrc);
             videoElement.appendChild(alternateSource);
           }
         }
       }
     }
   }])
+
+  function createSourceElement (src) {
+    var source = document.createElement('source');
+    source.setAttribute('src', src);
+    return source;
+  }
 })();
