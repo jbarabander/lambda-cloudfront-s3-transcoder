@@ -21,37 +21,27 @@
         scope.showHlsFallback = false;
         scope.safeStreamingSrc = $sce.trustAsResourceUrl(scope.streamingSrc);
         scope.safeFallbackSrc = $sce.trustAsResourceUrl(scope.fallbackSrc);
-        scope.loadVideo = function () {
-          var canPlayHls = document.createElement('video').canPlayType('application/vnd.apple.mpegURL');
-          console.log(canPlayHls);
-          if (canPlayHls === '' && Hls.isSupported()) {
-            scope.useHlsFallback = true;
-            $timeout(function () {
-              var video = outerDiv.getElementsByClassName('hls-fallback')[0];
-              var hls = new Hls();
-              hls.loadSource(scope.streamingSrc);
-              hls.attachMedia(video);
-              hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                scope.showHlsFallback = true;
-                scope.$apply();
-                video.play();
-              });
-            });
-            return;
+        var videoElement = document.createElement('video');
+        videoElement.setAttribute("controls","controls");
+        videoElement.setAttribute("height", "270");
+        videoElement.setAttribute("width", "480");
+        videoElement.setAttribute("preload", "none");
+        var canPlayHls = videoElement.canPlayType('application/vnd.apple.mpegURL');
+        if (canPlayHls === '' && Hls.isSupported()) {
+          var hls = new Hls();
+          hls.loadSource(scope.streamingSrc);
+          hls.attachMedia(videoElement);
+        } else {
+          var source = document.createElement('source');
+          source.setAttribute('src', scope.streamingSrc);
+          videoElement.appendChild(source);
+          if (scope.fallbackSrc) {
+            var alternateSource = document.createElement('source');
+            alternateSource.setAttribute('src', scope.fallbackSrc);
+            videoElement.appendChild(alternateSource);
           }
-          scope.useNativeVideo = true;
-          $timeout(function () {
-            var video = outerDiv.getElementsByClassName('native-video')[0];
-            video.oncanplay = function () {
-              scope.showNativeVideo = true;
-              scope.$apply();
-              video.play();
-            }
-          })
         }
-        // video.oncanplay = function () {
-        //   video.play();
-        // };
+        outerDiv.appendChild(videoElement);
       }
     }
   }])
