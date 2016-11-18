@@ -7,31 +7,23 @@
       scope: {
         thumbnail: '@',
         streamingSrc: '@',
-        fallbackSrc: '@',
+        fallbacks: '=',
         height: '@',
         width: '@'
       },
       templateUrl: 'directives/ResponsiveVideoDirective/ResponsiveVideoDirective.html',
       link: function (scope, element, attr) {
         var outerDiv = element.children()[0];
-        scope.safeStreamingSrc = $sce.trustAsResourceUrl(scope.streamingSrc);
-        scope.safeFallbackSrc = $sce.trustAsResourceUrl(scope.fallbackSrc);
         var videoElement = document.getElementsByClassName('video-to-play')[0];
         videoElement.setAttribute("controls","controls");
         videoElement.setAttribute("height", "270");
         videoElement.setAttribute("width", "480");
-        var canPlayHls = videoElement.canPlayType('application/vnd.apple.mpegURL');
-        if (canPlayHls === '' && Hls.isSupported()) {
-          var hls = new Hls();
-          hls.loadSource(scope.streamingSrc);
-          hls.attachMedia(videoElement);
-        } else {
-          var source = createSourceElement(scope.streamingSrc);
-          videoElement.appendChild(source);
-          if (scope.fallbackSrc) {
-            var alternateSource = createSourceElement(scope.fallbackSrc);
+        console.log(scope.fallbacks);
+        if (Array.isArray(scope.fallbacks)) {
+          scope.fallbacks.forEach(function (uri) {
+            var alternateSource = createSourceElement(uri);
             videoElement.appendChild(alternateSource);
-          }
+          })
         }
       }
     }
